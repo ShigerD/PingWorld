@@ -14,7 +14,6 @@ import static android.content.ContentValues.TAG;
 
 public class PingUtils {
 
-
     public  void pingRun(String address){
 
         String returnParam = "";
@@ -77,11 +76,11 @@ public class PingUtils {
 
     }
 
-    public  String isPingSuccess(int pingNum, String m_strForNetAddress) {
+    public  String isPingSuccess(int pingNum, String ipAddress) {
         StringBuffer tv_PingInfo = new StringBuffer();
         try {
 
-            Process p = Runtime.getRuntime().exec("/system/bin/ping -c " + pingNum + " " + m_strForNetAddress); // 10.83.50.111
+            Process p = Runtime.getRuntime().exec("/system/bin/ping -c " + pingNum + " " + ipAddress); // 10.83.50.111
 // m_strForNetAddress
             int status = p.waitFor();
             String result ="";
@@ -102,8 +101,6 @@ public class PingUtils {
                 Log.d(TAG, "isPingSuccess: str = " + str);
                 tv_PingInfo.append(str);
             }
-
-
             return tv_PingInfo.toString();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -111,5 +108,23 @@ public class PingUtils {
         return "";
     }
 
+    public String extractNumAverage(String stringIn) {
+//        stringIn = "rtt min/avg/max/mdev = 3.412/24.719/39.086/9.172 ms";
+        String[] array = stringIn.split("/");
+        int arrayLenth = array.length;
+        Log.d(TAG, "extractNum: array =" + array);
+        Log.d(TAG, "extractNum: arrayLenth =" + arrayLenth);
+        for (int i = 0; i < arrayLenth; i++) {
+            Log.d(TAG, "extractNum:  " + " i=" + String.valueOf(i) + " = " + array[i]);
+        }
+        String outAverage = "";
+        if(arrayLenth> 6){
+            outAverage = array[5];
+        } else {
+            outAverage = "time out!";
+        }
+        Log.d(TAG, "onCreate: pingAverage" + outAverage);
+        return outAverage;
+    }
 
 }  
