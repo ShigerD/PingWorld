@@ -16,9 +16,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private String TAG = this.getClass().getSimpleName();
 
     //
-    String[] mPingArray = {"www.baidu.com"};
+    String[] mPingArray = {"baidu.com"};
     //
-    TextView mPingBaiduKey, mPingBaiduTv;
+    TextView mPingBaiduKey, mPingBaiduTv, mPingContentTv;
     Button mButtonBaidu;
     //
     private final int MSG_PING_START_Baidu = 0;
@@ -30,12 +30,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
             switch (msg.what){
                 case MSG_PING_START_Baidu:
                     PingUtils pingUtils = new PingUtils();
-                    String pingResult = pingUtils.isPingSuccess(1,mPingArray[0]);
+                    String pingResult = pingUtils.isPingSuccess(3,mPingArray[0]);
                     Log.d(TAG, "onCreate: pingResult = " + pingResult);
+                    mPingContentTv.setText(pingResult);
                     String pingAverage = pingUtils.extractNumAverage(pingResult);
                     mPingBaiduKey.setText(mPingArray[0]);
                     mPingBaiduTv.setText(pingAverage);
-
+                    mButtonBaidu.setEnabled(true);
                     break;
             }
         }
@@ -47,10 +48,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         //
         setupView();
-
         //init
         mHandler.sendEmptyMessage(MSG_PING_START_Baidu);
-
 
     }
 
@@ -58,6 +57,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void setupView(){
         mPingBaiduKey = findViewById(R.id.pingBaiduKey);
         mPingBaiduTv = findViewById(R.id.pingBaidu);
+        mPingContentTv = findViewById(R.id.ping_content);
+        //
         mButtonBaidu = findViewById(R.id.refrashBaidu);
         mButtonBaidu.setOnClickListener(this);
     }
@@ -67,6 +68,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         int id = view.getId();
         switch (id){
             case R.id.refrashBaidu:
+                mButtonBaidu.setEnabled(false);
                 mHandler.sendEmptyMessage(MSG_PING_START_Baidu);
                 break;
         }
